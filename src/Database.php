@@ -11,7 +11,10 @@ class Database {
 
         $dsn = "pgsql:host={$this->host};dbname={$this->name}";
 
-        return new PDO($dsn, $this->user, $this->password);
+        return new PDO($dsn, $this->user, $this->password, 
+        [PDO::ATTR_EMULATE_PREPARES => false, 
+        PDO::ATTR_STRINGIFY_FETCHES => false]
+    );
     }
 }
 
