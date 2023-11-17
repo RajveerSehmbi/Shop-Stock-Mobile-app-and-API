@@ -11,9 +11,19 @@ class InventoryGateway{
 
     public function getAll(): array{
 
-        $sql = "SELECT * FROM inventory";
-        $stmt = $this->conn->query($sql);
+        if (isset($_GET['shop'])){
 
+            $shop = $_GET['shop'];
+            $sql = "SELECT * FROM inventory WHERE shop_code = :shop";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindValue(":shop", $shop);
+            $stmt->execute();
+        }else{
+
+            $sql = "SELECT * FROM inventory";
+            $stmt = $this->conn->query($sql);
+        }
+        
         $data = [];
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
             $data[] = $row;
@@ -23,18 +33,50 @@ class InventoryGateway{
 
     public function create(array $data): string{
 
-        $sql = "INSERT INTO inventory (shop_code, item_code, quantity)
-                VALUES (:shop_code, item_code, quantity)";
+        $sql = "INSERT INTO inventory
+                VALUES (:inventory_code, :shop_code, item_code, quantity)";
         
         $stmt = $this->conn->prepare($sql);
 
+        $stmt->bindParam(":inventory_code", $data["inventory_code"], PDO::PARAM_STR);
         $stmt->bindParam(":shop_code", $data["name"], PDO::PARAM_STR);
-        $stmt->bindParam(":item_code", $data["item_code"], PDO::PARAM_INT);
+        $stmt->bindParam(":item_code", $data["item_code"], PDO::PARAM_STR);
         $stmt->bindParam(":quantity", $data["quantity"], PDO::PARAM_INT);
 
         $stmt->execute();
 
         return $this->conn->lastInsertId();
+    }
+
+    public function get(string $id): array{
+
+        $sql = "SELECT *
+                FROM inventory
+                WHERE inventory_code = :inventory_code";
+
+        $stmt = $this->conn->prepare($sql); 
+
+        $stmt->bindParam(":inventory_code", $id, PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function update(array $data): int{
+
+        $sql = "UPDATE inventory
+                SET quantity = quantity + :quantity
+                WHERE inventory_code = :inventory_code";
+        
+        $stmt = $this->conn->prepare($sql);
+
+        $stmt->bindParam(":inventory_code", $data["inventory_code"], PDO::PARAM_STR);
+        $stmt->bindParam(":quantity", $data["quantity"], PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        return $stmt->rowCount();
     }
 }
 

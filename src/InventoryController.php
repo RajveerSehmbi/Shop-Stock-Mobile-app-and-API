@@ -15,11 +15,50 @@ class InventoryController {
         }
     }
 
-    private function processResourceResponse(string $method, ?string $id): void {
+    private function processResourceResponse(string $method, string $id): void {
 
+        $item = $this->gateway->get($id);
+
+        if (! $item) {
+            http_response_code(404);
+            echo json_encode(['message'=> 'Item not found']);
+            return;
+        }
+
+        switch ($method) {
+            case 'GET':
+                echo json_encode($item);
+                break;
+
+            case 'PATCH':
+                $data = (array) json_decode(file_get_contents("php://input"), true);
+
+                $errors = $this->getValidationErrors($data, false);
+
+                if (!empty($errors)) {
+                    http_response_code(422);
+                    echo json_encode(["errors" => $errors]);
+                    break;
+                }
+                $id = $this->gateway->update($data);
+
+                http_response_code(201);
+                echo json_encode([
+                    "message"=> "Item added",
+                    "id" => $id
+                ]);
+                break;
+
+            default:
+                http_response_code(405);
+                header("Allow: GET, PATCH");
+
+        }
     }
+
     private function processCollectionResponse(string $method): void {
         switch ($method) {
+
             case "GET":
                 echo json_encode($this->gateway->getAll());
                 break;
@@ -38,7 +77,7 @@ class InventoryController {
 
                 http_response_code(201);
                 echo json_encode([
-                    "message"=> "Item added",
+                    "message"=> "Inventory item created",
                     "id" => $id
                 ]);
                 break;
@@ -49,22 +88,24 @@ class InventoryController {
         }
     }
 
-    private function getValidationErrors(array $data): array{
+    private function getValidationErrors(array $data, bool $is_new = true): array{
 
         $errors = [];
 
-        if (empty($data["shop_code"])) {
+        if (empty($data["inventory_code"])) {
+            $errors[] = "Inventory code is required";
+        }
+
+        if ($is_new && empty($data["shop_code"])) {
             $errors[] = "Shop's code is required";
         }
 
-        if (empty($data["item_code"])) {
+        if ($is_new && empty($data["item_code"])) {
             $errors[] = "Item's barcode is required";
         }
 
-        if (array_key_exists("item_code", $data)) {
-            if (filter_var($data["item_code"], FILTER_VALIDATE_INT) === false) {
-                $errors[] = "Item code must be an integer";
-            }
+        if (empty($data["quantity"])) {
+            $errors[] = "Initial quantity is required";
         }
 
         if (array_key_exists("quantity", $data)) {
@@ -75,5 +116,6 @@ class InventoryController {
 
         return $errors;
     }
+                    
 }
 ?>
