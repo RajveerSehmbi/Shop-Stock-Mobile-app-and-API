@@ -39,7 +39,7 @@ class InventoryGateway{
         $stmt = $this->conn->prepare($sql);
 
         $stmt->bindParam(":inventory_code", $data["inventory_code"], PDO::PARAM_STR);
-        $stmt->bindParam(":shop_code", $data["name"], PDO::PARAM_STR);
+        $stmt->bindParam(":shop_code", $data["shop_code"], PDO::PARAM_STR);
         $stmt->bindParam(":item_code", $data["item_code"], PDO::PARAM_STR);
         $stmt->bindParam(":quantity", $data["quantity"], PDO::PARAM_INT);
 
