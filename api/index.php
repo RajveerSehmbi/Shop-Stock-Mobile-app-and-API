@@ -18,7 +18,7 @@ if ($parts[1] === "inventory") {
 
     $id = $parts[2] ?? NULL; 
 
-    $database = new Database(getenv($POSTGRES_HOST), getenv($POSTGRES_DATABASE), getenv($POSTGRES_USER), getenv($POSTGRES_PASSWORD));
+    $database = new Database(getenv('POSTGRES_HOST'), getenv('POSTGRES_DATABASE'), getenv('POSTGRES_USER'), getenv('POSTGRES_PASSWORD'));
     $gateway = new InventoryGateway($database);
     $controller = new InventoryController($gateway);
 
