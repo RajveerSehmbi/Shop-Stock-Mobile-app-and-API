@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 spl_autoload_register(function ($class) {
-    require "src/$class.php";
+    require __DIR__ . "src/$class.php";
 });
 
 header("Content-type: application/json; charset=UTF-8");
