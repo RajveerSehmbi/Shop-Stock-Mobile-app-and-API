@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 spl_autoload_register(function ($class) {
-    require __DIR__ . "src/$class.php";
+    require "src/$class.php";
 });
 
 header("Content-type: application/json; charset=UTF-8");
@@ -22,5 +22,4 @@ if ($parts[1] === "inventory") {
 
     $controller->processRequest($_SERVER["REQUEST_METHOD"], $id);
 }
-
 ?>
