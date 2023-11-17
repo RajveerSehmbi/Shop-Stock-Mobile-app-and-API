@@ -9,7 +9,7 @@ class Database {
                                 private string $password) {}
     public function getConnection(): PDO {
 
-        $dsn = "pgsql:host={$this->host};port=5432;dbname={$this->name};options=endpoint%3Dep-winter-violet-50230661";
+        $dsn = "pgsql:host={$this->host};port=5432;dbname={$this->name};sslmode=require;options=endpoint%3Dep-winter-violet-50230661";
 
         return new PDO($dsn, $this->user, $this->password, 
         [PDO::ATTR_EMULATE_PREPARES => false, 
