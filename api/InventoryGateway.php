@@ -34,7 +34,7 @@ class InventoryGateway{
     public function create(array $data): string{
 
         $sql = "INSERT INTO inventory
-                VALUES (:inventory_code, :shop_code, item_code, quantity)";
+                VALUES (:inventory_code, :shop_code, :item_code, :quantity)";
         
         $stmt = $this->conn->prepare($sql);
 
