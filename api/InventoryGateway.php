@@ -78,7 +78,7 @@ class InventoryGateway{
         return $stmt->rowCount();
     }
 
-    public function delete(int $id): int{
+    public function delete(string $id): int{
 
         $sql = "DELETE FROM inventory WHERE inventory_id=:id";
 
