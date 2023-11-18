@@ -80,7 +80,7 @@ class InventoryGateway{
 
     public function delete(string $id): int{
 
-        $sql = "DELETE FROM inventory WHERE inventory_id=:id";
+        $sql = "DELETE FROM inventory WHERE inventory_code=:id";
 
         $stmt = $this->conn->prepare($sql);
 
