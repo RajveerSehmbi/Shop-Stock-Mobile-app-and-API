@@ -40,7 +40,7 @@ class ItemGateway{
 
         $sql = "SELECT *
                 FROM items
-                WHERE item_code = :item_code";
+                WHERE barcode = :item_code";
 
         $stmt = $this->conn->prepare($sql); 
 
@@ -55,7 +55,7 @@ class ItemGateway{
 
         $sql = "UPDATE items
                 SET price = price + :price
-                WHERE item_code = :item_code";
+                WHERE barcode = :item_code";
         
         $stmt = $this->conn->prepare($sql);
 
@@ -69,7 +69,7 @@ class ItemGateway{
 
     public function delete(string $id): int{
 
-        $sql = "DELETE FROM items WHERE item_code=:id";
+        $sql = "DELETE FROM items WHERE barcode=:id";
 
         $stmt = $this->conn->prepare($sql);
 
