@@ -22,4 +22,15 @@ if ($parts[1] === "inventory") {
 
     $controller->processRequest($_SERVER["REQUEST_METHOD"], $id);
 }
+
+if ($parts[1] === "items") {
+
+    $id = $parts[2] ?? NULL; 
+
+    $database = new Database(getenv('POSTGRES_HOST'), getenv('POSTGRES_DATABASE'), getenv('POSTGRES_USER'), getenv('POSTGRES_PASSWORD'));
+    $gateway = new ItemGateway($database);
+    $controller = new ItemController($gateway);
+
+    $controller->processRequest($_SERVER["REQUEST_METHOD"], $id);
+}
 ?>

@@ -2,9 +2,9 @@
 
 require_once('Database.php');
 
-class InventoryController {
+class ItemController {
 
-    public function __construct(private InventoryGateway $gateway) {
+    public function __construct(private ItemGateway $gateway) {
     }
 
     public function processRequest(string $method, ?string $id): void {
@@ -44,8 +44,8 @@ class InventoryController {
 
                 http_response_code(201);
                 echo json_encode([
-                    "message"=> "Quantity changed",
-                    "inventory_code"=> $id,
+                    "message"=> "Price changed",
+                    "item_code"=> $id,
                     "rows updated" => $row_count
                 ]);
                 break;
@@ -54,7 +54,7 @@ class InventoryController {
                 $row_count = $this->gateway->delete($id);
                 echo json_encode([
                     "message"=> "Item deleted",
-                    "iventory_code"=> $id,
+                    "item_code"=> $id,
                     "row_count"=> $row_count
                 ]);
                 break;
@@ -87,8 +87,9 @@ class InventoryController {
 
                 http_response_code(201);
                 echo json_encode([
-                    "message"=> "Inventory item created",
-                    "id" => $data["inventory_code"]
+                    "message"=> "Item created",
+                    "id" => $data["item_code"],
+                    "name" => $data["name"]
                 ]);
                 break;
             
@@ -102,30 +103,25 @@ class InventoryController {
 
         $errors = [];
 
-        if (empty($data["inventory_code"])) {
-            $errors[] = "Inventory code is required";
+        if (empty($data["item_code"])) {
+            $errors[] = "Item code is required";
         }
 
-        if ($is_new && empty($data["shop_code"])) {
-            $errors[] = "Shop's code is required";
+        if ($is_new && empty($data["name"])) {
+            $errors[] = "Item's name is required";
         }
 
-        if ($is_new && empty($data["item_code"])) {
-            $errors[] = "Item's barcode is required";
-        }
-
-        if (empty($data["quantity"])) {
-            $errors[] = "Initial quantity is required";
-        }
-
-        if (array_key_exists("quantity", $data)) {
-            if (filter_var($data["quantity"], FILTER_VALIDATE_INT) === false) {
-                $errors[] = "Quantity must be an integer";
-            }
+        if (empty($data["price"])) {
+            $errors[] = "Item's price is required";
         }
 
         return $errors;
     }
-                    
+
 }
+
+
+
+
+
 ?>
