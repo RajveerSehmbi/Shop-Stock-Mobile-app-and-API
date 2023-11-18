@@ -12,8 +12,6 @@ set_exception_handler("ErrorHandler::handleException");
 
 $parts = explode("/", $_SERVER["REQUEST_URI"]);
 
-echo $parts[0];
-
 if ($parts[1] === "inventory") {
 
     $id = $parts[2] ?? NULL; 

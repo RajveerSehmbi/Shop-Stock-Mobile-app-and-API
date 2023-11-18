@@ -1,2 +1,2 @@
-.vercel
-.env.development.local
+api_root/.vercel
+api_root/.env.development.local
