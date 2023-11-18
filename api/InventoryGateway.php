@@ -31,7 +31,7 @@ class InventoryGateway{
         return $data;
     }
 
-    public function create(array $data): string{
+    public function create(array $data): void{
 
         $sql = "INSERT INTO inventory
                 VALUES (:inventory_code, :shop_code, :item_code, :quantity)";
@@ -45,7 +45,6 @@ class InventoryGateway{
 
         $stmt->execute();
 
-        return $this->conn->lastInsertId();
     }
 
     public function get(string $id): array{
@@ -73,6 +72,19 @@ class InventoryGateway{
 
         $stmt->bindParam(":inventory_code", $data["inventory_code"], PDO::PARAM_STR);
         $stmt->bindParam(":quantity", $data["quantity"], PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        return $stmt->rowCount();
+    }
+
+    public function delete(int $id): int{
+
+        $sql = "DELETE FROM inventory WHERE inventory_id=:id";
+
+        $stmt = $this->conn->prepare($sql);
+
+        $stmt->bindParam(":id", $id, PDO::PARAM_STR);
 
         $stmt->execute();
 

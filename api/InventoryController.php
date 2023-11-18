@@ -40,12 +40,22 @@ class InventoryController {
                     echo json_encode(["errors" => $errors]);
                     break;
                 }
-                $id = $this->gateway->update($data);
+                $row_count = $this->gateway->update($data);
 
                 http_response_code(201);
                 echo json_encode([
-                    "message"=> "Item added",
-                    "id" => $id
+                    "message"=> "Quantity changed",
+                    "inventory_code"=> $id,
+                    "rows updated" => $row_count
+                ]);
+                break;
+
+            case "DELETE":
+                $row_count = $this->gateway->delete($id);
+                echo json_encode([
+                    "message"=> "Item deleted",
+                    "iventory_code"=> $id,
+                    "row_count"=> $row_count
                 ]);
                 break;
 
@@ -73,12 +83,12 @@ class InventoryController {
                     echo json_encode(["errors" => $errors]);
                     break;
                 }
-                $id = $this->gateway->create($data);
+                $this->gateway->create($data);
 
                 http_response_code(201);
                 echo json_encode([
                     "message"=> "Inventory item created",
-                    "id" => $id
+                    "id" => $data["inventory_code"]
                 ]);
                 break;
             
