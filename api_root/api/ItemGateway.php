@@ -28,9 +28,9 @@ class ItemGateway{
         
         $stmt = $this->conn->prepare($sql);
 
-        $stmt->bindParam(":item_code", $data["inventory_code"], PDO::PARAM_STR);
-        $stmt->bindParam(":name", $data["shop_code"], PDO::PARAM_STR);
-        $stmt->bindParam(":price", $data["item_code"], PDO::PARAM_STR);
+        $stmt->bindParam(":item_code", $data["item_code"], PDO::PARAM_STR);
+        $stmt->bindParam(":name", $data["name"], PDO::PARAM_STR);
+        $stmt->bindParam(":price", $data["price"], PDO::PARAM_STR);
 
         $stmt->execute();
 

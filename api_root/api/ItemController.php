@@ -103,7 +103,7 @@ class ItemController {
 
         $errors = [];
 
-        if (empty($data["item_code"])) {
+        if ($is_new && empty($data["item_code"])) {
             $errors[] = "Item code is required";
         }
 
